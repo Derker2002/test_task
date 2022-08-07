@@ -36,16 +36,22 @@ cadcam::mwTPoint3d<double>*** CreateMassive( const unsigned long nx, const unsig
 }
 
 
-void FuncEv(mwArcFunction& func, cadcam::mwTPoint3d<double>*** mass,
+void CutSphere(mwArcFunction& func, cadcam::mwTPoint3d<double>*** mass,
             const unsigned long nx, const unsigned long ny,
             const unsigned long nz, const double delta, 
             const double deltaT, const double sphereRad)
 {
+    //create sphereCenter
     cadcam::mwTPoint3d<double> sphereCentr;
     int x1, y1, z1, x2, y2, z2;
+
+    //loop for function
     for (double dt=func.GetBeginParameter(); dt< func.GetEndParameter(); dt+=deltaT)
     {
+        //get center from func
         sphereCentr = {func.Evaluate(dt)};
+
+        //define borders for loop
         x1 = sphereCentr.x() - sphereRad / delta;
         y1 = sphereCentr.y() - sphereRad / delta;
         z1 = sphereCentr.z() - sphereRad / delta;
@@ -84,15 +90,19 @@ void SaveSkin( cadcam::mwTPoint3d<double>*** mass, std::string skinFileName,
         for (int k = 0; k < nz; k++)
         {
             yl = 0;
+
             //select the highest dot 
             while (yl < ny - 1 && mass[i][yl + 1][k].vis())
             {
                 mass[i][yl++][k].setVis(false);
             }
+
+            //add selected dot to buffer
             data += std::to_string(mass[i][yl][k].x()) + ' ' + std::to_string(mass[i][yl][k].y()) + ' ' + std::to_string(mass[i][yl][k].z()) + '\n';
         }
     }
-    //put data onti file and save it 
+
+    //put data in file and save it 
     saveFile << data;
     saveFile.close();
 }
@@ -102,16 +112,19 @@ void SaveSkin( cadcam::mwTPoint3d<double>*** mass, std::string skinFileName,
 void CreateSkin( const cadcam::mwTPoint3d<double> refPoint, 
 				const unsigned long nx, const unsigned long ny, 
 				const unsigned long nz, const double sphereRad, 
-				mwArcFunction &func, const double deltaT, 
+                mwArcFunction& func, const double deltaT, //replace mwDiscreteFunction with mwArcFunction!
 				const double delta, const std::string &skinFileName )
 {
-
+    //create 3d massive
     cadcam::mwTPoint3d<double>*** mass;
 
+    //fill it
     mass=CreateMassive(nx, ny, nz, delta);
 
-    FuncEv(func,mass, nx, ny, nz, delta, deltaT, sphereRad);
+    //hide dots
+    CutSphere(func,mass, nx, ny, nz, delta, deltaT, sphereRad);
 
+    //save result
     SaveSkin(mass, skinFileName, nx, ny, nz);
 
 }

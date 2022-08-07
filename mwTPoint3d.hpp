@@ -76,12 +76,12 @@ namespace cadcam
 		/*!Sets the 3d point to the new position.
 			\param ar const array of the 3d point elements
 		*/
-		inline mwTPoint3d( const T ar[] )
+		inline mwTPoint3d( const T ar[] ,const bool vis=true)
 		{
 			elems[0] = ar[0];
 			elems[1] = ar[1];
 			elems[2] = ar[2];
-			visible = true;
+			visible = vis;
 		};
 
 //#############################################################################
