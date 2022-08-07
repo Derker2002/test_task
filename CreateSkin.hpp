@@ -1,0 +1,22 @@
+#ifndef CREATESKIN_HPP
+#define CREATESKIN_HPP
+
+#include "mwTPoint3d.hpp"
+#include "mwDiscreteFunction.hpp"
+#include "mwTPoint3d.hpp"
+#include "mwArcFunction.hpp"
+#include <fstream>
+#include <math.h>
+void CreateSkin( const cadcam::mwTPoint3d<double> refPoint, 
+				const unsigned long nx, const unsigned long ny, 
+				const unsigned long nz, const double sphereRad, 
+				mwArcFunction &func, const double deltaT, 
+				const double delta, const std::string &skinFileName );
+
+cadcam::mwTPoint3d<double>*** CreateMassive(const unsigned long nx, const unsigned long ny,
+	const unsigned long nz, const double delta);
+
+void SaveSkin(cadcam::mwTPoint3d<double>*** mass, std::string skinFileName,
+	const unsigned long nx, const unsigned long ny, const unsigned long nz);
+
+#endif /* CREATESKIN_HPP */

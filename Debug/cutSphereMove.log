@@ -1,0 +1,3 @@
+﻿  mwArcFunction.cpp
+CreateSkin.obj : warning LNK4075: не учитывается "/EDITANDCONTINUE" из-за спецификации "/INCREMENTAL:NO"
+  cutSphereMove.vcxproj -> F:\Rabota\test_task\Debug\cutSphereMove.exe
