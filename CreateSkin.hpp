@@ -16,6 +16,11 @@ void CreateSkin( const cadcam::mwTPoint3d<double> refPoint,
 cadcam::mwTPoint3d<double>*** CreateMassive(const unsigned long nx, const unsigned long ny,
 	const unsigned long nz, const double delta);
 
+void FuncEv(mwArcFunction& func, cadcam::mwTPoint3d<double>*** mass,
+	const unsigned long nx, const unsigned long ny,
+	const unsigned long nz, const double delta,
+	const double deltaT, const double sphereRad);
+
 void SaveSkin(cadcam::mwTPoint3d<double>*** mass, std::string skinFileName,
 	const unsigned long nx, const unsigned long ny, const unsigned long nz);
 
