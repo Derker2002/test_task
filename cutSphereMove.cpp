@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
 	const double deltaT = 0.01;
 
 	//Radius of the sphere
-	const double sphereRad = 40.;
+	const double sphereRad = 10.;
 
 	//Name of the file to write the skin data to
 	std::string skinFileName( "test.asc" );
