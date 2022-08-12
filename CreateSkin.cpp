@@ -50,7 +50,7 @@ void CutSphere(mwArcFunction& func, cadcam::mwTPoint3d<double>*** mass,
             const unsigned long nz, const double delta, 
             const double deltaT, const double sphereRad,const double accuracity)
 {
-    //create sphereCenter
+    //create sphereCenter and path
     cadcam::mwTPoint3d<double> sphereCentr,sphereCentr2,vect,pos,point1,point2;
     std::vector<cadcam::mwTPoint3d<double>> sphereMove;
 
@@ -61,23 +61,24 @@ void CutSphere(mwArcFunction& func, cadcam::mwTPoint3d<double>*** mass,
     {
         //get center from func
         sphereCentr = func.Evaluate(dt);
-        if (dt+deltaT<func.GetEndParameter())
-            sphereCentr2 = func.Evaluate(dt+deltaT);
+        if (dt + deltaT <= func.GetEndParameter())
+            sphereCentr2 = func.Evaluate(dt + deltaT);
         else
-            sphereCentr2 = func.Evaluate(func.GetBeginParameter());
+            sphereCentr2 = func.Evaluate(func.GetEndParameter());
+        
 
-
+        //find vector
         vect = sphereCentr2 - sphereCentr;
         !vect;
 
-
+        //move sphere from Centr to Centr2 and save the path
         for (pos=sphereCentr; !PointInSphere(sphereCentr2,sphereRad/2,pos); pos += vect*accuracity)
             sphereMove.push_back(pos);
 
+        //define borders for loop
         point1.min(sphereCentr, sphereCentr2);
         point2.max(sphereCentr, sphereCentr2);
 
-        //define borders for loop
         x1 = (point1.x() - sphereRad) / delta;
         y1 = (point1.y() - sphereRad) / delta;
         z1 = (point1.z() - sphereRad) / delta;
@@ -86,17 +87,30 @@ void CutSphere(mwArcFunction& func, cadcam::mwTPoint3d<double>*** mass,
         z2 = (point2.z() + sphereRad) / delta;
 
         //loop (hide dots)
-        for (int i = x1; i < x2 && i < nx; i++)
-            for (int k = y1; k < y2 && k < ny; k++)
-                for (int j = z1; j < z2 && j < nz; j++) {
-                    if (PointInSphere(sphereCentr, sphereRad, mass[i][k][j]))
+        for (int i = x1; i < x2; i++) 
+        {
+            if (i >= nx || i < 0)
+                continue;
+            for (int k = y1; k < y2; k++) 
+            {
+                if (k >= ny || k<0)
+                    continue;
+                for (int j = z1; j < z2 && j < nz && j>0; j++) 
+                {
+                    if(j >= nz || j < 0)
+                        continue;
+
+                    if (PointInSphere(sphereCentr, sphereRad, mass[i][k][j]) ||
+                        PointInSphere(sphereCentr2, sphereRad, mass[i][k][j]))
                         mass[i][k][j].setVis(false);
+
                     for each (cadcam::mwTPoint3d<double> movCentr in sphereMove)
-                    {
                         if (PointInSphere(movCentr, sphereRad, mass[i][k][j]))
                             mass[i][k][j].setVis(false);
-                    }
+
                 }
+            }
+        }
                       
         sphereMove.clear();
     }  

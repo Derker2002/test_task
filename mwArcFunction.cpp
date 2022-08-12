@@ -32,9 +32,9 @@ mwArcFunction::point3d mwArcFunction::Evaluate( const double t ) const
 
 	point3d retValue;
 
-	retValue.x( 500. + mRadius * sin( cadcam::MW_2PI * t ) );
-	retValue.z( 250. + mRadius * cos( cadcam::MW_2PI * t ) );
-	retValue.y( 100. );
+	retValue.x(500. + mRadius * sin(cadcam::MW_2PI * t));
+	retValue.y( 100.-t*100);
+	retValue.z(250. + mRadius * cos(cadcam::MW_2PI * t));
 
 	return retValue;
 }

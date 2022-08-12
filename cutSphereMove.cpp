@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 	const double delta = 1.;
 
 	//Discrete step for move function calculation
-	const double deltaT = 0.01;
+	const double deltaT = 0.1;
 
 	//Radius of the sphere
 	const double sphereRad = 10.;
