@@ -306,7 +306,7 @@ namespace cadcam
 
 
 //#############################################################################
-	//vis operator
+	//vis function
 	// Return the state of point (visible it or not)
 
 		inline bool vis() {
@@ -314,11 +314,30 @@ namespace cadcam
 		}
 
 //#############################################################################
-			//setVis operator
-			// Return the state of point (visible it or not)
+			//setVis function
+			// Set the state of point (visible it or not)
 
 		inline void setVis(const bool vis) {
 			visible = vis;
+		}
+
+//#############################################################################
+			//min function
+			// return minimum x,y,z from two points
+		inline void min(mwTPoint3d<T> point1, mwTPoint3d<T> point2) {
+			elems[0] = std::min(point1.x(), point2.x());
+			elems[1] = std::min(point1.y(), point2.y());
+			elems[2] = std::min(point1.z(), point2.z());
+			
+			}
+//#############################################################################
+			//min function
+			// return minimum x,y,z from two points
+		inline void max(mwTPoint3d<T> point1, mwTPoint3d<T> point2) {
+			elems[0] = std::max(point1.x(), point2.x());
+			elems[1] = std::max(point1.y(), point2.y());
+			elems[2] = std::max(point1.z(), point2.z());
+			
 		}
 //#############################################################################
 

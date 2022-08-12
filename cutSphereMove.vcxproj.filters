@@ -2,19 +2,22 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Quellcodedateien">
-      <UniqueIdentifier>{ccd3eadc-e2d8-4b60-996a-ce8e8d0e5dea}</UniqueIdentifier>
+      <UniqueIdentifier>{50134d60-f971-474f-99ed-352b147a77f7}</UniqueIdentifier>
       <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
     </Filter>
     <Filter Include="Header-Dateien">
-      <UniqueIdentifier>{9c397b8f-07c1-4a4a-8d4c-acfd10cd7f72}</UniqueIdentifier>
+      <UniqueIdentifier>{485c39b2-0791-4865-a849-47fe8abc932a}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl</Extensions>
     </Filter>
     <Filter Include="Ressourcendateien">
-      <UniqueIdentifier>{01b55041-e930-46e1-b7a5-4b4e24f1f9a9}</UniqueIdentifier>
+      <UniqueIdentifier>{3c1894e5-2d43-4ebb-93b1-bf4599a1065a}</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CreateSkin.cpp">
+      <Filter>Quellcodedateien</Filter>
+    </ClCompile>
     <ClCompile Include="cutSphereMove.cpp">
       <Filter>Quellcodedateien</Filter>
     </ClCompile>
@@ -27,11 +30,11 @@
     <ClCompile Include="mwIdxRangeException.cpp">
       <Filter>Quellcodedateien</Filter>
     </ClCompile>
-    <ClCompile Include="CreateSkin.cpp">
-      <Filter>Quellcodedateien</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CreateSkin.hpp">
+      <Filter>Header-Dateien</Filter>
+    </ClInclude>
     <ClInclude Include="mwArcFunction.hpp">
       <Filter>Header-Dateien</Filter>
     </ClInclude>
@@ -45,9 +48,6 @@
       <Filter>Header-Dateien</Filter>
     </ClInclude>
     <ClInclude Include="mwTPoint3d.hpp">
-      <Filter>Header-Dateien</Filter>
-    </ClInclude>
-    <ClInclude Include="CreateSkin.hpp">
       <Filter>Header-Dateien</Filter>
     </ClInclude>
   </ItemGroup>

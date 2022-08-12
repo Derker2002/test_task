@@ -27,6 +27,9 @@ int main(int argc, char* argv[])
 	//Radius of the sphere
 	const double sphereRad = 10.;
 
+	//Accuracity of move (only odd numbers!) bigger=faster
+	const double accuracity = 3;
+
 	//Name of the file to write the skin data to
 	std::string skinFileName( "test.asc" );
 
@@ -34,7 +37,7 @@ int main(int argc, char* argv[])
 	mwArcFunction func( 0., 1., 150. );
 
 	//Evaluation here
-	CreateSkin( referencePoint, nx, ny, nz, sphereRad, func, deltaT, delta, skinFileName );
+	CreateSkin( referencePoint, nx, ny, nz, sphereRad, func, deltaT,accuracity, delta, skinFileName );
 
 	return 0;
 }

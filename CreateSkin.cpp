@@ -36,42 +36,71 @@ cadcam::mwTPoint3d<double>*** CreateMassive( const unsigned long nx, const unsig
 }
 
 
+
+
+bool PointInSphere(cadcam::mwTPoint3d<double> sphereCentr,double sphereRad, cadcam::mwTPoint3d<double> dot) 
+{
+    return std::pow(sphereCentr.x() - dot.x(), 2) +
+        std::pow(sphereCentr.y() - dot.y(), 2) +
+        std::pow(sphereCentr.z() - dot.z(), 2) <= std::pow(sphereRad, 2);
+}
+
 void CutSphere(mwArcFunction& func, cadcam::mwTPoint3d<double>*** mass,
             const unsigned long nx, const unsigned long ny,
             const unsigned long nz, const double delta, 
-            const double deltaT, const double sphereRad)
+            const double deltaT, const double sphereRad,const double accuracity)
 {
     //create sphereCenter
-    cadcam::mwTPoint3d<double> sphereCentr;
-    int x1, y1, z1, x2, y2, z2;
+    cadcam::mwTPoint3d<double> sphereCentr,sphereCentr2,vect,pos,point1,point2;
+    std::vector<cadcam::mwTPoint3d<double>> sphereMove;
 
+    double x1, y1, z1, x2, y2, z2;
+    
     //loop for function
     for (double dt=func.GetBeginParameter(); dt< func.GetEndParameter(); dt+=deltaT)
     {
         //get center from func
-        sphereCentr = {func.Evaluate(dt)};
+        sphereCentr = func.Evaluate(dt);
+        if (dt+deltaT<func.GetEndParameter())
+            sphereCentr2 = func.Evaluate(dt+deltaT);
+        else
+            sphereCentr2 = func.Evaluate(func.GetBeginParameter());
+
+
+        vect = sphereCentr2 - sphereCentr;
+        !vect;
+
+
+        for (pos=sphereCentr; !PointInSphere(sphereCentr2,sphereRad/2,pos); pos += vect*accuracity)
+            sphereMove.push_back(pos);
+
+        point1.min(sphereCentr, sphereCentr2);
+        point2.max(sphereCentr, sphereCentr2);
 
         //define borders for loop
-        x1 = sphereCentr.x() - sphereRad / delta;
-        y1 = sphereCentr.y() - sphereRad / delta;
-        z1 = sphereCentr.z() - sphereRad / delta;
-        x2 = sphereCentr.x() + sphereRad / delta;
-        y2 = sphereCentr.y() + sphereRad / delta;
-        z2 = sphereCentr.z() + sphereRad / delta;
+        x1 = (point1.x() - sphereRad) / delta;
+        y1 = (point1.y() - sphereRad) / delta;
+        z1 = (point1.z() - sphereRad) / delta;
+        x2 = (point2.x() + sphereRad) / delta;
+        y2 = (point2.y() + sphereRad) / delta;
+        z2 = (point2.z() + sphereRad) / delta;
 
+        //loop (hide dots)
         for (int i = x1; i < x2 && i < nx; i++)
             for (int k = y1; k < y2 && k < ny; k++)
-                for (int j = z1; j < z2 && j < nz; j++)
-                {
-                    if (std::pow(sphereCentr.x() - mass[i][k][j].x(), 2) +
-                        std::pow(sphereCentr.y() - mass[i][k][j].y(), 2) +
-                        std::pow(sphereCentr.z() - mass[i][k][j].z(), 2) <= std::pow(sphereRad, 2))
+                for (int j = z1; j < z2 && j < nz; j++) {
+                    if (PointInSphere(sphereCentr, sphereRad, mass[i][k][j]))
                         mass[i][k][j].setVis(false);
+                    for each (cadcam::mwTPoint3d<double> movCentr in sphereMove)
+                    {
+                        if (PointInSphere(movCentr, sphereRad, mass[i][k][j]))
+                            mass[i][k][j].setVis(false);
+                    }
                 }
-    }
-    
+                      
+        sphereMove.clear();
+    }  
 }
-
 
 
 
@@ -112,7 +141,7 @@ void SaveSkin( cadcam::mwTPoint3d<double>*** mass, std::string skinFileName,
 void CreateSkin( const cadcam::mwTPoint3d<double> refPoint, 
 				const unsigned long nx, const unsigned long ny, 
 				const unsigned long nz, const double sphereRad, 
-                mwArcFunction& func, const double deltaT, //replace mwDiscreteFunction with mwArcFunction!
+                mwArcFunction& func, const double deltaT,const double accuracity, //replace mwDiscreteFunction with mwArcFunction! and add accuracity
 				const double delta, const std::string &skinFileName )
 {
     //create 3d massive
@@ -122,7 +151,7 @@ void CreateSkin( const cadcam::mwTPoint3d<double> refPoint,
     mass=CreateMassive(nx, ny, nz, delta);
 
     //hide dots
-    CutSphere(func,mass, nx, ny, nz, delta, deltaT, sphereRad);
+    CutSphere(func,mass, nx, ny, nz, delta, deltaT, sphereRad,accuracity);
 
     //save result
     SaveSkin(mass, skinFileName, nx, ny, nz);
